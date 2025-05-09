@@ -1,71 +1,114 @@
-# API de Résumé de Texte
+# 📝 Text Summarization API
 
-Ce microservice permet de générer des résumés de texte en utilisant différents moteurs d'IA (Azure OpenAI, OpenAI, et bientôt Gemini).
+Transform your long texts into concise, meaningful summaries using state-of-the-art AI models (Azure OpenAI, OpenAI, Gemini). This microservice is designed for easy integration into any project, with a simple REST API and multi-language support.
 
-## Configuration
+---
 
-1. Clonez ce dépôt
-2. Installez les dépendances :
+## 🚀 Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/summarize_api.git
+   cd summarize_api
+   ```
+2. **Install dependencies**
    ```bash
    npm install
    ```
-3. Créez un fichier `.env` à la racine du projet avec les variables suivantes :
+3. **Create a `.env` file** at the project root with your API keys:
+   ```env
+   AZURE_OPENAI_KEY=your_azure_key
+   AZURE_OPENAI_ENDPOINT=your_azure_endpoint
+   AZURE_OPENAI_DEPLOYMENT_NAME=your_deployment_name
+   AZURE_OPENAI_API_VERSION=your_api_version
+   # For future engines
+   OPENAI_API_KEY=your_openai_key
+   GEMINI_API_KEY=your_gemini_key
    ```
-   AZURE_OPENAI_KEY=votre_clé_azure
-   AZURE_OPENAI_ENDPOINT=votre_endpoint_azure
-   AZURE_OPENAI_DEPLOYMENT_NAME=votre_nom_de_déploiement
-   
-   OPENAI_API_KEY=votre_clé_openai
-   
-   GEMINI_API_KEY=votre_clé_gemini
+4. **Run locally**
+   ```bash
+   npm run dev
    ```
+5. **Open the demo**
+   - Go to [http://localhost:3000/demo.html](http://localhost:3000/demo.html)
 
-## Développement local
+---
 
-Pour lancer le serveur de développement :
+## 🌐 API Endpoint
 
-```bash
-npm run dev
-```
+**POST** `/api/summarize`
 
-## Déploiement
-
-Le projet est configuré pour être déployé sur Vercel :
-
-```bash
-npm run deploy
-```
-
-## Utilisation de l'API
-
-### Endpoint : POST /api/summarize
-
-#### Paramètres de la requête :
-- `text` (obligatoire) : Le texte à résumer
-- `engine` (optionnel) : Le moteur à utiliser ('azure', 'openai', ou 'gemini'). Par défaut : 'azure'
-
-#### Exemple de requête :
-```bash
-curl -X POST http://localhost:3000/api/summarize \
-  -H "Content-Type: application/json" \
-  -d '{"text": "Votre texte à résumer", "engine": "azure"}'
-```
-
-#### Réponse :
+**Request Body:**
 ```json
 {
-  "success": true,
-  "summary": "Le résumé généré",
-  "engine": "azure"
+  "text": "Text to summarize",
+  "engine": "azure" // or "openai", "gemini" (coming soon)
 }
 ```
 
-## Interface de démonstration
+**Response:**
+```json
+{
+  "success": true,
+  "summary": "Generated summary"
+}
+```
 
-Une interface de démonstration est disponible à l'URL `/demo.html` après le déploiement.
+---
 
-## Moteurs disponibles
+## 🛠️ Usage Example (JavaScript)
+```js
+async function getSummary(text) {
+  const response = await fetch('https://your-deployment-url/api/summarize', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, engine: 'azure' })
+  });
+  const data = await response.json();
+  return data.summary;
+}
+```
 
-- ✅ Azure OpenAI
-- 🔜 OpenAI (bientôt disponible)
-- 🔜 Gemini (bientôt disponible) 
+## 🛠️ Usage Example (Python)
+```python
+import requests
+
+def get_summary(text):
+    url = "https://your-deployment-url/api/summarize"
+    payload = {"text": text, "engine": "azure"}
+    response = requests.post(url, json=payload)
+    return response.json()["summary"]
+```
+
+---
+
+## ⚙️ Environment Variables
+- `AZURE_OPENAI_KEY`, `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_DEPLOYMENT_NAME`, `AZURE_OPENAI_API_VERSION`
+- (Optional) `OPENAI_API_KEY`, `GEMINI_API_KEY`
+
+---
+
+## 📄 Documentation & Demo
+- **API Docs:** [doc.html](./public/doc.html)
+- **Live Demo:** [demo.html](./public/demo.html)
+
+---
+
+## ☁️ Deploy on Vercel
+1. Push your code to GitHub
+2. Import the repo on [vercel.com](https://vercel.com/)
+3. Add your environment variables in the Vercel dashboard
+4. Deploy and get your live API URL!
+
+---
+
+## ✨ Features
+- Multi-language support (keeps original language)
+- Ultra-concise, faithful summaries
+- No hallucinations or invented info
+- Easy integration in any app
+- Modern, beautiful demo & docs
+
+---
+
+© 2025 AiCrafters Text Summarization API. All rights reserved. 
