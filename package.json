@@ -1,0 +1,20 @@
+{
+  "name": "summarize-api",
+  "version": "1.0.0",
+  "description": "API de résumé de texte utilisant différents moteurs d'IA",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "deploy": "vercel deploy"
+  },
+  "dependencies": {
+    "@azure/openai": "^1.0.0-beta.11",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "vercel": "^32.5.0"
+  }
+} 

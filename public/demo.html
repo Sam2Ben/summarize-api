@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démo API de Résumé via Azure OpenAI (Teal) </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin: 10px 0;
+            padding: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: none;
+        }
+        .error {
+            color: red;
+        }
+        .loading {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Démo API de Résumé</h1>
+    <div>
+        <label for="text">Texte à résumer :</label>
+        <textarea id="text" placeholder="Entrez votre texte ici..."></textarea>
+    </div>
+    <div>
+        <label for="engine">Moteur :</label>
+        <select id="engine">
+            <option value="azure">Azure OpenAI</option>
+            <option value="openai" disabled>OpenAI (bientôt disponible)</option>
+            <option value="gemini" disabled>Gemini (bientôt disponible)</option>
+        </select>
+    </div>
+    <div class="button-container">
+        <button onclick="summarizeText()" class="summarize-button">Résumer avec Azure OpenAI</button>
+    </div>
+    <div id="loading" class="loading">Traitement en cours...</div>
+    <div id="result"></div>
+    <div class="footer">
+        © 2025 AiCrafters Text Summarization API. All rights reserved
+    </div>
+
+    <script>
+        async function summarizeText() {
+            const text = document.getElementById('text').value;
+            const engine = document.getElementById('engine').value;
+            const resultDiv = document.getElementById('result');
+            const loadingDiv = document.getElementById('loading');
+
+            if (!text) {
+                resultDiv.innerHTML = '<p class="error">Veuillez entrer un texte à résumer.</p>';
+                resultDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                loadingDiv.style.display = 'block';
+                resultDiv.style.display = 'none';
+
+                const response = await fetch('/api/summarize', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        engine: engine
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <h3>Résumé :</h3>
+                        <p>${data.summary}</p>
+                        <p><small>Moteur utilisé : ${data.engine}</small></p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p class="error">Erreur : ${data.error}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">Erreur : ${error.message}</p>`;
+            } finally {
+                loadingDiv.style.display = 'none';
+                resultDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html> 
